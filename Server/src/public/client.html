@@ -1,0 +1,127 @@
+<!-- <html>
+
+<head>
+    <title>Node.JS Email application</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+        // <![CDATA[
+        $(document).ready(function () {
+                    var from, to, subject, text;
+                    $("#send_email").click(function () {
+                            to = $("#to").val();
+                            subject = $("#subject").val();
+                            text = $("#content").val();
+                            $("#message").text("Sending E-mail...Please wait");
+                            $.get("http://localhost:3000/send", {
+                                    to: to,
+                                    subject: subject,
+                                    text: text
+                                }, function (data) {
+                                    if (data == "sent") {
+                                        $("#message").empty().html("Email is been sent at "+to+".Please check inbox!");
+                                        }
+                                    });
+                            });
+                    });
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <h1>Mailer In Node.JS</h1>
+        <input id="to" type="text" placeholder="Enter E-mail ID where you want to send" />
+        <input id="subject" type="text" placeholder="Write Subject" />
+        <textarea id="content" cols="40" rows="5" placeholder="Write what you want to send"></textarea>
+        <button id="send_email">Send Email</button>
+        <span id="message"></span>
+    </div>
+    </div>
+    </body> -->
+
+<html>
+
+<body>
+
+  <head>
+    <script src=' https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+    <style>
+      #messages {
+        height: 300px;
+        width: 300px;
+        overflow: hidden;
+        border: #ccc solid 1px;
+      }
+
+      section {
+        margin-left: 20px;
+      }
+    </style>
+  </head>
+  <!-- <script src="http://localhost:8001/faye.js"></script>  -->
+  <section>
+          <h1>Chat Client #1</h1>
+          <div id="messages"></div>
+          <textarea rows="2" cols="35" id="chat"></textarea>
+          <input type='button' value='Chat' id='fire' />
+          <script src='http://localhost:3000/faye/client.js'></script>
+          <script>
+            var $chat = $('#chat');
+            $('#fire').on('click',null, function() {
+              var url = 'http://localhost:3000/chat/message';
+              var message = {message: 'Client: ' + $chat.val()};
+              $.ajax({
+                type: 'POST',
+                url: url,
+                data: message,
+                dataType: 'json',
+                error: function (xhr, desc, err) {
+                  switch (xhr.status) {
+                    case 402:
+                      console.log('jwt token err: ', xhr.status)
+                      break;
+                    default:
+                      break;
+                  }
+                    console.log('chat response: ', xhr.status);
+                }
+              });
+              $chat.val('');
+            });
+
+            var client = new Faye.Client('/faye',{
+              timeout: 20
+            });
+
+            var subscription = client.subscribe('/channel', function(res) {
+              console.log("Message:"+ res.message);
+              console.log("Message:"+ res.token);
+              $('#messages').append('<p>'+ res.message+'</p>');
+            });
+
+            subscription.then(function() {
+              console.log('subscribe is active');
+            });
+            
+          </script>
+          </section>
+
+  <!-- <div id="availableRooms"></div>
+  <div id="currentUser"></div>
+  <div id="currentChat"></div> -->
+
+  <!--
+    <input type="text" id="chatRoomName" placeholder="New Chatroom Name"></input>
+    <button id="newRoom">Create</button>
+    <br/>
+-->
+  <!-- <input type="text" id="myText" placeholder="Enter message!"></input>
+  <button id="send">Send</button>
+
+  <div id="output">
+    <div>
+      <script src="chatMain.js"></script>
+    </div>
+  </div> -->
+</body>
+
+</html>

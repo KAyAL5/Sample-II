@@ -1,0 +1,12 @@
+# exclude node_modules and dist directory.
+/package-lock.json
+/client/node_modules
+/client/node_modules/*
+/client/dist
+/client/dist/*
+/client/package-lock.json
+/server/node_modules
+/server/node_modules/*
+/server/dist
+/server/dist/*
+/server/package-lock.json
