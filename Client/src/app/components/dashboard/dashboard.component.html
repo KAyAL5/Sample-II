@@ -1,0 +1,14 @@
+<p>
+  Dashboard
+</p>
+<ul>
+    <li *ngFor="let user of users">
+        {{user.username}} ({{user.firstName}} {{user.lastName}})
+        - <a (click)="deleteUser(user.id)" class="text-danger">Delete</a>
+    </li>
+</ul>
+<form (ngSubmit)="submit()">
+  <label>name</label>
+  <input name="name"/>
+  <button type="submit">Submit</button>
+</form>

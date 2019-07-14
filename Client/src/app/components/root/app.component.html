@@ -1,0 +1,99 @@
+<!-- nav -->
+<!-- <nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
+  <div class="navbar-nav">
+      <a class="nav-item nav-link" [routerLink]="['/dashboard']">Dashboard</a>
+      <a class="nav-item nav-link" [routerLink]="['/chat']">Chat</a>
+      <a class="nav-item nav-link" [routerLink]="['/chatsocket']">Chat via Socket</a>
+      <a class="nav-item nav-link" *ngIf="currentUser" (click)="logout()">Logout</a>
+  </div>
+</nav> -->
+
+<!-- main app container -->
+<!-- <app-block-ui></app-block-ui>
+<div class="jumbotron">
+  <div class="container">
+      <div class="row">
+          <div class="col-md-6 offset-md-3">
+              <app-message></app-message>
+              <button mat-raised-button (click)="openDialog()">Chat</button>
+              <router-outlet></router-outlet>
+          </div>
+      </div>
+  </div>
+</div> -->
+<!-- credits -->
+<!-- <div class="footer">
+    <p>
+        <span>Kayal</span>
+    </p>
+    <p>
+        <a href="http://Xcelsoftwareservices.com" target="_blank">Xcel Software Services</a>
+    </p>
+</div> -->
+
+<!-- ============================================================================================ -->
+<app-block-ui></app-block-ui>
+<mat-sidenav-container fullscreen>
+    <mat-sidenav #start>
+      <mat-nav-list *ngIf="currentUser">
+        <a mat-list-item [routerLink]="['/dashboard']">
+          <mat-icon>home</mat-icon>
+          <span>Dashboard</span>
+        </a>
+        <a mat-list-item [routerLink]="['/chat']">
+          <mat-icon>question_answer</mat-icon>
+          <span>Chat</span>
+        </a>
+        <a mat-list-item (click)="openDialog()">
+          <mat-icon>person_add</mat-icon>
+          <span>Chat via Socket</span>
+        </a>
+        <a mat-list-item (click)="logout()">
+          <mat-icon>account_circle</mat-icon>
+          <span>Logout</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+  
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <button mat-icon-button (click)="start.open('mouse')">
+          <mat-icon>menu</mat-icon>
+        </button>
+    
+        <span>Xcel Software Service</span>
+        <span class="example-fill-remaining-space"></span>
+        <span class="align-center"></span>
+        <span class="example-spacer"></span>
+        <button mat-button routerLink="about">About</button>
+        <button mat-button>Services</button>
+        <button mat-button routerLink="contact">Contact</button>
+    
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <mat-icon>dialpad</mat-icon>
+            <span>Redial</span>
+          </button>
+          <button mat-menu-item disabled>
+            <mat-icon>voicemail</mat-icon>
+            <span>Check voicemail</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>notifications_off</mat-icon>
+            <span>Disable alerts</span>
+          </button>
+          <button mat-menu-item *ngIf="currentUser" (click)="logout()">
+              <mat-icon>account_circle</mat-icon>
+              <span>logout</span>
+          </button>
+        </mat-menu>
+      </mat-toolbar-row>
+  
+    </mat-toolbar>
+    <app-message></app-message>
+    <router-outlet></router-outlet>
+  
+  </mat-sidenav-container>

@@ -1,0 +1,21 @@
+<!-- <div [style.background-color]="background" class="toast"
+[@fadeAnimation]="{value: animationState, params:
+   { fadeIn: toastConfig.animation.fadeIn, fadeOut: toastConfig.animation.fadeOut }}"
+(@fadeAnimation.done)="onFadeFinished($event)">
+  <mat-icon>{{ iconType }}</mat-icon>
+  <div>{{ data.text }}</div>
+  <mat-icon (click)="close()">cancel</mat-icon>
+</div> -->
+
+
+<div id="toast-container" class="md-toast-top-right"
+[style.background-color]="background"
+     [@fadeAnimation]="{value: animationState, params:
+        { fadeIn: toastConfig.animation.fadeIn, fadeOut: toastConfig.animation.fadeOut }}"
+     (@fadeAnimation.done)="onFadeFinished($event)">
+   <div class="md-toast">
+         <mat-icon>{{ iconType }}</mat-icon>
+         <div class="md-toast-message">{{ data.text }}</div>
+         <mat-icon class="md-toast-close-button" (click)="close()">cancel</mat-icon>
+   </div>
+</div>

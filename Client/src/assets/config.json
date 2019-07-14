@@ -1,0 +1,25 @@
+{
+    "environments": [
+        {
+            "name": "running",
+            "api": "dev"
+        },
+        {
+            "name": "prod",
+            "api": "http://localhost:8080"
+        },
+        {
+            "name": "uat",
+            "api": "http://localhost:8081"
+        },
+        {
+            "name": "dev",
+            "api": "http://localhost:3000"
+        }
+    ],
+    "app":
+    {
+        "secret": "abcdefg",
+        "etc": "you can add other app const value"
+    }
+}
