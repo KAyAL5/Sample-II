@@ -19,5 +19,8 @@ router.get('/', function(req,res){
   router.route('/onUploadfile').post(chatCtrl.onUploadfile);
   router.route('/showfile').post(chatCtrl.showfile);
 
+  router.route('/listemessagesgroup').post(chatCtrl.listemessagesgroup);
+  
+
 // Export API routes
 module.exports = router;

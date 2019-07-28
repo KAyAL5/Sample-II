@@ -12,6 +12,8 @@ const socketEvents = require('./src/app/shared/chat.socket');
 const app = express();
 
 // Import routes
+const organizationAPI = require("./src/app/routes/organization.route.js");
+const branchAPI = require("./src/app/routes/branch.route.js");
 const userAPI = require("./src/app/routes/user.route.js");
 const chatAPI = require("./src/app/routes/chat.route.js");
 const roomAPI = require("./src/app/routes/room.route.js");
@@ -68,6 +70,7 @@ app.use(function (err, req, res, next) {
 // Create server with http module and pass express to http.Server()
 // Express will serve as the handler for requests to our server.
 // In return we get the instance of server which we store in server variable.
+// in simple created a server variable and pass the express application in it.
 var server = http.createServer(app);
 
 //======================= socket io=======================
@@ -137,6 +140,8 @@ app.set("newBayeux",bayeux);
 // });
 
 // ===========================end=======================================
+app.use('/organization',organizationAPI);
+app.use('/branch',branchAPI);
 app.use('/user', userAPI);
 app.use('/chat', chatAPI);
 app.use('/room', roomAPI);
@@ -145,9 +150,11 @@ app.use('/chatgroup', chatgroupAPI);
 // set error handler
 // app.use(errorHandler);
 
+const PORT = process.env.PORT || 3000;
+
 // listen for requests
-server.listen(3000, () => {
-    console.log("Server is listening on port 3000");
+server.listen(PORT, () => {
+    console.log(`Server is listening on port: ${PORT}`);
 });
 
 //Error catch

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { AppSettingsService } from '@app-services/shared/app-settings.service';
@@ -7,10 +8,11 @@ import { AppSettingsService } from '@app-services/shared/app-settings.service';
 import { Room } from '@app-interfaces/IRoom';
 
 @Injectable({ providedIn: 'root' })
-export class RoomService {
+export class ChatRoomService {
     appConst: any;
+
     constructor(private http: HttpClient, private appConstSvr: AppSettingsService) {
-        // this.appConst = appConstSvr.getAppConst();
+        //this.appConst = appConstSvr.getAppConst();
         this.appConst = 'http://localhost:3000';
     }
 

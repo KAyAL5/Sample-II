@@ -8,11 +8,11 @@ import { AuthService } from '@app-services/auth/auth.service';
 
 @Injectable()
 export class AppJwtInterceptorService implements HttpInterceptor {
-    constructor(private authSev: AuthService) { }
+    constructor(private authSvc: AuthService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // add authorization header with jwt token if available
-        const currentUser = this.authSev.currentUserValue;
+        const currentUser = this.authSvc.currentUserValue;
         if (currentUser && currentUser.token) {
             const newRequest = request.clone({ headers: request.headers.set('Authorization', `Bearer ${currentUser.token}`) });
             // request = request.clone({
@@ -20,7 +20,7 @@ export class AppJwtInterceptorService implements HttpInterceptor {
             //         Authorization: `Bearer ${currentUser.token}`
             //     }
             // });
-            console.log('headers:', request.headers);
+            //console.log('headers:', request.headers);
             return next.handle(newRequest);
         } else {
             return next.handle(request);

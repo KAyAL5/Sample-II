@@ -15,9 +15,9 @@ export class ChatService {
   private basetoken: any;
   client: any;
 
-  constructor(private _http: HttpClient, private settingSev: AppSettingsService) {
+  constructor(private _http: HttpClient, private settingSvc: AppSettingsService) {
     this.appConst = 'http://localhost:3000';
-    // this.appConst = this.settingSev.getAppConst();
+    // this.appConst = this.settingSvc.getAppConst();
     // this.headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     // this.headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
     this.basetoken = JSON.parse(localStorage.getItem('currentUser')).token;
@@ -69,30 +69,23 @@ export class ChatService {
     return this._http.post(url, params, { headers: this.headers });
   }
 
-  listeMessagesgroupe(groupe_id): Observable<any> {
-    const url = `${this.appConst}/chat/listemessagesgroupe`;
-    const datas = JSON.stringify({ token: this.basetoken, groupe_id: groupe_id });
+  listeMessagesgroup(group_id): Observable<any> {
+    const url = `${this.appConst}/chat/listemessagesgroup`;
+    const datas = JSON.stringify({ token: this.basetoken, group_id: group_id });
     const params = 'params=' + datas;
     return this._http.post(url, params, { headers: this.headers });
   }
 
-  envoiMessageGroupe(message, groupe_id): Observable<any> {
-    const url = `${this.appConst}/chat/envoimessagegroupe`;
-    const datas = JSON.stringify({ message: message, token: this.basetoken, groupe_id: groupe_id });
+  envoiMessageGroup(message, group_id): Observable<any> {
+    const url = `${this.appConst}/chat/envoimessagegroup`;
+    const datas = JSON.stringify({ message: message, token: this.basetoken, group_id: group_id });
     const params = 'params=' + datas;
     return this._http.post(url, params, { headers: this.headers });
   }
 
-  envoiFileGroupe(message, groupe_id): Observable<any> {
-    const url = `${this.appConst}/chat/envoifilegroupe`;
-    const datas = JSON.stringify({ message: message, token: this.basetoken, groupe_id: groupe_id });
-    const params = 'params=' + datas;
-    return this._http.post(url, params, { headers: this.headers });
-  }
-
-  getGroupe(groupe_id): Observable<any> {
-    const url = `${this.appConst}/chat/getgroupe`;
-    const datas = JSON.stringify({ token: this.basetoken, groupe_id: Number(groupe_id) });
+  envoiFileGroup(message, group_id): Observable<any> {
+    const url = `${this.appConst}/chat/envoifilegroup`;
+    const datas = JSON.stringify({ message: message, token: this.basetoken, group_id: group_id });
     const params = 'params=' + datas;
     return this._http.post(url, params, { headers: this.headers });
   }

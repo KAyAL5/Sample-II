@@ -5,19 +5,22 @@ import { MatButtonModule, MatToolbarModule, MatInputModule,
   MatProgressSpinnerModule, MatCardModule, MatDialogModule,
   MatTableModule, MatMenuModule, MatIconModule,
   MatDatepickerModule, MatSelectModule, MatNativeDateModule,
-  MatListModule, MatSidenavModule, MatSnackBarModule } from '@angular/material';
+  MatListModule, MatSidenavModule, MatSnackBarModule, MatRadioModule, 
+  MatExpansionModule } from '@angular/material';
 
 @NgModule({
   imports: [CommonModule, MatButtonModule, MatToolbarModule, MatInputModule,
     MatProgressSpinnerModule, MatCardModule, MatDialogModule,
     MatTableModule, MatMenuModule, MatIconModule,
     MatDatepickerModule, MatSelectModule, MatNativeDateModule,
-    MatListModule, MatSidenavModule, MatSnackBarModule],
+    MatListModule, MatSidenavModule, MatSnackBarModule, MatRadioModule,
+    MatExpansionModule],
   exports: [CommonModule, MatButtonModule, MatToolbarModule, MatInputModule,
     MatProgressSpinnerModule, MatCardModule,
     MatDialogModule, MatTableModule, MatMenuModule, MatIconModule,
     MatDatepickerModule, MatSelectModule, MatNativeDateModule,
-    MatListModule, MatSidenavModule, MatSnackBarModule],
+    MatListModule, MatSidenavModule, MatSnackBarModule, MatRadioModule,
+    MatExpansionModule],
     schemas: [
       CUSTOM_ELEMENTS_SCHEMA
   ],

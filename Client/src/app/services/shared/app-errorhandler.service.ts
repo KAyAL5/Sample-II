@@ -6,12 +6,12 @@ import { ToastService } from '@app-services/shared/app-toast.service';
 export class ErrorHandlerService implements ErrorHandler 
 {
     constructor(private injector: Injector,
-                private toastSev: ToastService) { }
+                private toastSvc: ToastService) { }
 
     handleError(error) 
     {
         debugger;
-        this.toastSev.show({
+        this.toastSvc.show({
             text: error.message,
             type: 'error',
           });

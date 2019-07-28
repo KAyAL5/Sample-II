@@ -56,7 +56,11 @@ function listemessagesuser(req, res){
 }
 
 function listemessagesroom (req, res){
-    res.send({message:'call listemessagesroom', errorCode: true });
+    res.send({message:[{message:"msg 1 room"}, {message:"msg 2 room"},{message:"msg 3 room"}], errorCode: true });
+}
+
+function listemessagesgroup(req,res) {
+    res.send({message: [{message:"msg gr 1"}, {message:"msg gr 2"},{message:"msg gr 3"}], errorCode: true });
 }
 
 function envoimessageuser(req, res){
@@ -83,8 +87,10 @@ function showfile(req, res){
     res.send({data:'call showfile'});
 }
 
+
 module.exports = {chatMessage,
     getuser, listemessagesuser, envoimessageuser, 
+    listemessagesgroup, 
     listemessagesroom,
     envoifileuser, onUploadfile, showfile
 };

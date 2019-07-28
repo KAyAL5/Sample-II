@@ -1,30 +1,30 @@
-<h1 mat-dialog-title>Add file</h1>
-<div dialog-draggable-attr class="icon-text">
-    <!-- <h1 mat-dialog-title>Hi, {{data.name}}</h1> -->
-    <span mat-dialog-title>Hi, {{user}}</span>
-    <!-- <mat-icon (click)="close()">cancel</mat-icon> -->
-  
-    <button mat-icon-button style="text-align: right">
-      <mat-icon (click)="close()">cancel</mat-icon>
-    </button>
-  
+
+<div dialog-draggable-attr class="icon-text" [style.backgroundColor]="'#673ab7'" [style.margin]="'-24px -24px 0 -24px'">
+    <!-- background:violet;margin: -24px -24px 0 -24px; -->
+  <span mat-dialog-title style="width: 100%">{{user}}
+      <button mat-icon-button style="float:right; margin-top:-6px;width:20px">
+        <mat-icon [style.margin]="'-24px -10px -19px -16px'" (click)="close()">cancel</mat-icon>
+      </button>
+  </span>
 </div>
 
 <div mat-dialog-content>
   <div class="divMessages" #divMessages>
+     {{data.name}}
   </div>
   <div *ngFor="let message of messages">
     {{message}}
   </div>
-  
-<mat-form-field>
-    <span><i *ngIf="isTyping" class="isTyping">typing...</i></span>
-    <input matInput [(ngModel)]="message" placeholder="comment"  (keypress)="typing()" (keyup)="$event.keyCode == 13 && sendMessage()">
-</mat-form-field>
 
+  <mat-form-field>
+    <span><i *ngIf="isTyping" class="isTyping">typing...</i></span>
+    <input matInput [(ngModel)]="message" placeholder="comment" (keypress)="typing()"
+      (keyup)="$event.keyCode == 13 && sendMessage()">
+  </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-button [disabled]="!this.message || this.message==''" (click)="sendMessage()" cdkFocusInitial>Send</button>
+  <button mat-button [disabled]="!this.message || this.message=='' || this.selected =='0'" (click)="sendMessage()"
+    cdkFocusInitial>Send</button>
 </div>
 
 <!-- <h1 mat-dialog-title>Add file</h1>

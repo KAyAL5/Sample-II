@@ -8,18 +8,31 @@ class Socket{
 
 	constructor(socket){
 		this.io = socket;
+		this.onlineusers = [];
 	}
 	
 	socketEvents(){
 
 		this.io.on('connection', (socket) => {
+
+			this.onlineusers.push(socket);
+			var clients = this.io.sockets.clients();
+			//var clientsroom = this.io.sockets.clients('room'); // all users from room `room`
+			// socket.on('online', function(data){
+			// 	console.log('a user ' + data._id + ' connected');
+			// 	this.onlineusers.push(data)
+			//   });
+
             /* using test perpose */
             socket.on('new-message', (message) => {
                 this.io.emit('new-message', message);
 			});
 			
 			socket.on('typing', (data) => {
-				socket.broadcast.in(data.room).emit('typing', {data: data, isTyping: true});
+				console.log(socket.id);
+				var typingfrom = data.typingfrom.room!=''?data.typingfrom.room:data.typingfrom.group!=''?data.typingfrom.group:data.typingfrom.users;
+				socket.broadcast.emit("typing",{data: typingfrom, isTyping: true});
+				//socket.broadcast.in(typingfrom).emit('typing', {data: typingfrom, isTyping: true});
 			});
 
 			/* Get the user's Chat list	*/
@@ -128,6 +141,7 @@ class Socket{
 			* sending the disconnected user to all socket users. 
 			*/
 			socket.on('disconnect',async () => {
+				this.onlineusers.splice(this.onlineusers.indexOf(socket), 1);
 				//socket.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
 				socket.broadcast.emit(`chat-list-response`,{
 					error : false ,
@@ -138,7 +152,6 @@ class Socket{
 			});
 
 		});
-
 	}
 	
 	socketConfig(){

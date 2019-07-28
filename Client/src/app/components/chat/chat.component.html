@@ -1,29 +1,22 @@
-<div>
-    <label>Rooms: </label>
-    <select>
-        <option value="0">--Select--</option>
-        <option *ngFor="let room of rooms" value={{room.id}}>
-            {{room.roomName}}
-        </option>
-    </select>
-    <label>Groups: </label>
-    <select>
-        <option value="0">--Select--</option>
-        <option *ngFor="let group of chatgroups" value={{group.id}}>
-            {{group.groupName}}
-        </option>
-    </select>
-    <label>Users: </label>
-    <select>
-        <option value="0">--Select--</option>
-        <option *ngFor="let user of users" value={{user.id}}>
-            {{user.firstName}}  {{user.lastName}}
-        </option>
-    </select>
-</div>
-<div class="card-header" *ngIf="typechat && typechat=='room'"><i class="fa fa-table"></i> ROOM</div>
-<div class="card-header" *ngIf="typechat && typechat=='groupe' && groupe"><i class="fa fa-table"></i> Group {{groupe.nom}}</div>
+<div class="card-header" *ngIf="typechat && typechat=='room'"><i class="fa fa-table"></i> Room</div>
+<div class="card-header" *ngIf="typechat && typechat=='group' && group"><i class="fa fa-table"></i> Group {{group.groupName}}</div>
 <div class="card-header" *ngIf="typechat && typechat=='user' && tchat_user"><i class="fa fa-table"></i> User {{tchat_user.pseudo}}</div>
+
+<div>
+  <div>
+    <mat-radio-group aria-label="Select an option" [(ngModel)]="selectedChatWith" (change)="optionChatChange($event)">
+        <mat-radio-button value="1">room </mat-radio-button>
+        <mat-radio-button value="2">group </mat-radio-button>
+        <mat-radio-button value="3">private</mat-radio-button>
+      </mat-radio-group>
+      <mat-select [(ngModel)]="selected" (selectionChange)="selChatChange($event)">
+          <mat-option value="0">Select</mat-option>
+          <mat-option *ngFor="let item of dropdowndata" [value]="item.key">
+            {{item.value}}
+          </mat-option>
+        </mat-select>
+      </div>
+</div>
 
 <div class="card-body" >
   <div class="panel-body" style="overflow-y: scroll; height: 70vh">
@@ -37,7 +30,7 @@
             <strong [ngClass]="{'primary-font': true, 'pull-right': item.token==token}">{{item.token==token ?'Me':item.pseudo}}</strong>
             <small [ngClass]="{'text-muted': true, 'pull-right': item.token!=token}">
               <i class="fa fa-clock-o fa-fw">
-              </i> {{item.date_envoi}} ago
+              </i> {{item.message}}
             </small>
           </div>
           <p *ngIf="item.format_message=='texte'">{{item.message}}</p>
@@ -60,14 +53,14 @@
     </form>
   </nav>
 
-  <nav *ngIf="typechat=='groupe'" class="navbar-nav navbar-expand-lg navbar-light bg-light">
-    <form  class="form-inline" (ngSubmit)="envoiMessagegroupe()" style="text-align: left" name="">
+  <nav *ngIf="typechat=='group'" class="navbar-nav navbar-expand-lg navbar-light bg-light">
+    <form  class="form-inline" (ngSubmit)="envoiMessagegroup()" style="text-align: left" name="">
       <input type="text" style="width: 50rem" [(ngModel)]="this.messageAenvoye"  name="messageenvoiroom" class="form-control" placeholder="message" aria-label="message" aria-describedby="basic-addon2"   autocomplete="off" >
       <button class="btn btn-outline-secondary" [disabled]="!this.messageAenvoye || this.messageAenvoye==''" type="submit">Send</button>
     </form>
     <form  class="form-inline image-upload" style="margin-left: 2px">
-      <button for="file-input" (click)="fileInputgroupe.click()" class="btn btn-outline-secondary" title="Fichier joint"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
-      <input type="file" (change)="handleFileInputgroupe($event)" name="uploads" #fileInputgroupe />
+      <button for="file-input" (click)="fileInputgroup.click()" class="btn btn-outline-secondary" title="Fichier joint"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
+      <input type="file" (change)="handleFileInputgroup($event)" name="uploads" #fileInputgroup />
     </form>
   </nav>
 

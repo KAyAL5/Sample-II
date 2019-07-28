@@ -4,7 +4,7 @@ import { HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import {AppSettingsService, AppGlobalService, AuthService,
     ChatService, AppJwtInterceptorService, AppErrorInterceptorService,
-    AppBlockUIInterceptorService, ChatSocketService, RoomService,
+    AppBlockUIInterceptorService, ChatSocketService, ChatRoomService,
    ChatGroupService, ErrorHandlerService } from '@app-services/index';
 
 @NgModule({
@@ -15,7 +15,7 @@ import {AppSettingsService, AppGlobalService, AuthService,
     providers: [
         AppSettingsService, AppGlobalService, AuthService,
         ChatService, AppJwtInterceptorService, AppErrorInterceptorService,
-        AppBlockUIInterceptorService, ChatSocketService, RoomService,
+        AppBlockUIInterceptorService, ChatSocketService, ChatRoomService,
         ChatGroupService, ErrorHandlerService,
         { provide: HTTP_INTERCEPTORS, useClass: AppJwtInterceptorService, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: AppErrorInterceptorService, multi: true },

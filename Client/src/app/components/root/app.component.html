@@ -33,8 +33,9 @@
 
 <!-- ============================================================================================ -->
 <app-block-ui></app-block-ui>
-<mat-sidenav-container fullscreen>
-    <mat-sidenav #start>
+<mat-sidenav-container fullscreen >
+    <mat-sidenav #sidenav>
+    <!-- <mat-sidenav #start> -->
       <mat-nav-list *ngIf="currentUser">
         <a mat-list-item [routerLink]="['/dashboard']">
           <mat-icon>home</mat-icon>
@@ -48,16 +49,96 @@
           <mat-icon>person_add</mat-icon>
           <span>Chat via Socket</span>
         </a>
-        <a mat-list-item (click)="logout()">
+        
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                  <mat-icon>question_answer</mat-icon>
+                  <span>Group Chat</span>
+              </mat-panel-title>
+              <mat-panel-description>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ul>
+              <li *ngFor="let group of chatgroups" (click)="selectChatTo(group.groupName)">
+                  {{group.groupName}}
+              </li>
+            </ul>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                  <mat-icon>question_answer</mat-icon>
+                  <span>Room Chat</span>
+              </mat-panel-title>
+              <mat-panel-description>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ul>
+              <li *ngFor="let room of chatrooms" (click)="selectChatTo(room.roomName)"> 
+                  {{room.roomName}}
+              </li>
+            </ul>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                  <mat-icon>question_answer</mat-icon>
+                  <span>Personal Chat</span>
+              </mat-panel-title>
+              <mat-panel-description>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ul>
+              <li>
+                Amar
+              </li>
+              <li>
+                Akbar
+              </li>
+              <li>
+                  🔴<i>Antone</i>
+              </li>
+            </ul>
+        </mat-expansion-panel>
+   
+        <!-- <mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
+          <mat-icon>question_answer</mat-icon>
+          <span class="full-width" *ngIf="isExpanded || isShowing">Chat</span>
+          <mat-icon class="menu-button" [ngClass]="{'rotated' : showSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
+        </mat-list-item>
+        <div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
+            <a mat-list-item href="...">Rooms</a>
+            <mat-list-item (click)="showSubSubMenu = !showSubSubMenu" class="parent">
+                <span class="full-width" *ngIf="isExpanded || isShowing">Groups</span>
+                <mat-icon class="menu-button" [ngClass]="{'rotated' : showSubSubMenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
+              </mat-list-item>
+              <div class="submenu" [ngClass]="{'expanded' : showSubSubMenu}" *ngIf="isShowing || isExpanded">
+                  <mat-list-item>Group 1</mat-list-item>
+                  <mat-list-item>Group 2</mat-list-item>
+              </div>
+            <mat-list-item (click)="showSubSubMenu = !showSubSubMenu" class="parent">
+              <span class="full-width" *ngIf="isExpanded || isShowing">Persons</span>
+              <mat-icon class="menu-button" [ngClass]="{'rotated' : showSubSubMenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
+            </mat-list-item>
+            <div class="submenu" [ngClass]="{'expanded' : showSubSubMenu}" *ngIf="isShowing || isExpanded">
+              <mat-list-item>SubSubmenu Item 1</mat-list-item>
+              <mat-list-item>SubSubmenu Item 2</mat-list-item>
+            </div>
+          </div> -->
+
+        
+
+        <!-- <a mat-list-item (click)="logout()">
           <mat-icon>account_circle</mat-icon>
           <span>Logout</span>
-        </a>
+        </a> -->
       </mat-nav-list>
     </mat-sidenav>
   
     <mat-toolbar color="primary">
       <mat-toolbar-row>
-        <button mat-icon-button (click)="start.open('mouse')">
+        <button mat-icon-button (click)="sidenav.open('mouse')">
           <mat-icon>menu</mat-icon>
         </button>
     

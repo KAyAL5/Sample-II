@@ -14,7 +14,7 @@ export class AuthService {
     public currentUser: Observable<User>;
 
     constructor(private http: HttpClient,
-        private ChatSocketSev: ChatSocketService,
+        private ChatSocketSvc: ChatSocketService,
         private appConst: AppGlobalService) {
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUser = this.currentUserSubject.asObservable();
@@ -39,7 +39,7 @@ export class AuthService {
 
     logout() {
         // update online to false in user collection
-        this.ChatSocketSev.logout(this.currentUserValue);
+        this.ChatSocketSvc.logout(this.currentUserValue);
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);

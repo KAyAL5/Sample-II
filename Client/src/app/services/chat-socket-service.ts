@@ -13,7 +13,9 @@ export class ChatSocketService {
   private basetoken: any;
   private socket;
 
-  constructor(private _http: HttpClient, private settingSev: AppSettingsService) {
+  
+
+  constructor(private _http: HttpClient, private settingSvc: AppSettingsService) {
     this.appConst = 'http://localhost:3000';
     this.socket = io(this.appConst);
     if(localStorage.getItem('currentUser')){
@@ -21,6 +23,7 @@ export class ChatSocketService {
     }
     
   }
+
 
   listeUser(): Observable<any> {
     const url = `${this.appConst}/chat/listeusers`;
@@ -36,7 +39,7 @@ export class ChatSocketService {
     return this._http.post(url, params, { headers: this.headers });
   }
 
-  public sendMessage(message) {
+  public sendMessage = (message) => {
     this.socket.emit('new-message', message);
   }
 
@@ -61,29 +64,29 @@ export class ChatSocketService {
   //   return observable;
   // }
 
-  typing(data) {
+  meTyping(data) {
     this.socket.emit('typing', data);
   }
 
-  // public receivedTyping = () => {
-  //   return Observable.create((observer) => {
-  //       this.socket.on('typing', (data) => {
-  //           observer.next(data);
-  //       });
-  //   });
-  // }
-
-  receivedTyping() {
-    const observable = new Observable<{ isTyping: boolean}>(observer => {
-      this.socket.on('typing', (data) => {
-        observer.next(data);
-      });
-      return () => {
-        this.socket.disconnect();
-      };
+  public receivedTyping = () => {
+    return Observable.create((observer) => {
+        this.socket.on('typing', (data) => {
+            observer.next(data);
+        });
     });
-    return observable;
-  }
+  } 
+
+  // receivedTyping() {
+  //   const observable = new Observable<{ isTyping: boolean}>(observer => {
+  //     this.socket.on('typing', (data) => {
+  //       observer.next(data);
+  //     });
+  //     return () => {
+  //       this.socket.disconnect();
+  //     };
+  //   });
+  //   return observable;
+  // }
 
   public logout(data) {
     this.socket.emit('logout', data);

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
 
+import { ChatRoomService, ChatGroupService, AppGlobalService } from '@app-services/index';
 import { ChatdialogComponent } from '@app-components/chatdialog/chatdialog.component';
 
 import { AuthService } from '@app-services/auth/auth.service';
@@ -16,26 +17,46 @@ import { User } from '@app-interfaces/IUser';
 })
 export class AppComponent implements OnInit {
   currentUser: User;
+  chatrooms:any[]=[];
+  chatgroups:any[]=[];
+  onlineusers: any[]=[];
+
+  dialogRef: MatDialogRef<ChatdialogComponent>;
   
   constructor(private router: Router,
-    private authSev: AuthService,
+    private authSvc: AuthService,
+    private globalSvc: AppGlobalService,
+    private roomSvc: ChatRoomService,
+    private groupSvc:ChatGroupService,
     private dialog: MatDialog) {
-    this.authSev.currentUser.subscribe(cu => this.currentUser = cu);
+    this.authSvc.currentUser.subscribe(cu => this.currentUser = cu);
   }
 
   ngOnInit() {
     // localStorage.debug = 'socket.io-client:socket';
+    this.roomSvc.getAll().subscribe(rooms => {
+      this.chatrooms = rooms;
+    });
+    this.groupSvc.getAll().subscribe(groups => {
+      this.chatgroups=groups;
+    });
   }
 
   logout() {
-    this.authSev.logout();
+    this.authSvc.logout();
     this.router.navigate(['/login']);
   }
 
+  selectChatTo(chatto){
+    this.openDialog();
+    this.globalSvc.updateStringSubject(chatto);
+  }
+
   openDialog(): void {
-    const dialogRef = this.dialog.open(ChatdialogComponent, {
-      width: '250px',
-      data: { name: ' drag me' },
+    if (this.dialogRef!=undefined) return;
+    this.dialogRef = this.dialog.open(ChatdialogComponent, {
+      width: '300px',
+      data: { name: '' },
       hasBackdrop:false,
       disableClose: true,
       position: { right: '0', bottom: '0'},
@@ -43,7 +64,7 @@ export class AppComponent implements OnInit {
       height: '300'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    this.dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
   }

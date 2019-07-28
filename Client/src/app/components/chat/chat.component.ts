@@ -1,7 +1,9 @@
 import {Component, OnInit, OnDestroy, Input} from '@angular/core';
+import { MatRadioChange } from '@angular/material';
+import { AuthService, UserService, ChatService, ChatRoomService, ChatGroupService } from '@app-services/index';
 
-import { AuthService, UserService, ChatService, RoomService, ChatGroupService } from '@app-services/index';
 import { User, Room, IChatGroup } from '@app-interfaces/index';
+import {IDropdown} from '@app-interfaces/IShared';
 
 @Component({
   selector: 'app-chat',
@@ -16,19 +18,25 @@ export class ChatComponent implements OnInit, OnDestroy {
   @Input() typechat: string;
   private keepSetInterval: any;
   private selectedFile: File;
-  public rooms: any = [];
+  public chatrooms: any = [];
   public chatgroups: any = [];
+  onlineusers: any[]=[];
   public users: any = [];
 
-  public tchat_user: any;
+  private tchat_user: any;
   @Input() tchat_user_id: string;
-  // CHAT GROUPE
-  @Input() groupe_id: Number;
-  public groupe: any;
+
+  // CHAT GROUP
+  groupId: String;
+  group: any;
+
+  dropdowndata:IDropdown[];
+  private selectedChatOn:string;
+  selected="0";
 
   constructor(private authSvc: AuthService,
   private userSvc: UserService,
-  private roomSvc: RoomService,
+  private chatroomSvc: ChatRoomService,
   private chatgroupSvc: ChatGroupService,
   private chatSvc: ChatService) { }
 
@@ -36,33 +44,16 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.authSvc.currentUser.subscribe(cu  => this.tchat_user = cu);
     this.tchat_user_id = this.tchat_user._id;
 
-    this.roomSvc.getAll()
-    .subscribe((res: string) => {
-      this.rooms = res;
-    });
-
-    this.chatgroupSvc.getAll()
-    .subscribe((res) =>{
-      this.chatgroups = res;
-    });
-
-    this.userSvc.getAll()
-    .subscribe((res) =>{
-      this.users = res;
-    });
-
     clearInterval(this.keepSetInterval);
     if (this.typechat === 'room') {
       this.ngOnInitroom();
-    } else if (this.typechat === 'groupe') {
-      this.ngOnInitgroupe();
+    } else if (this.typechat === 'group') {
+      this.ngOnInitgroup();
     } else if (this.typechat === 'user') {
       this.ngOnInituser();
     }
 
-    this.chatSvc
-    .subscribedchatMessage()
-    .subscribe((message: string) => {
+    this.chatSvc.subscribedchatMessage().subscribe((message: string) => {
       console.log(message)
     });
   }
@@ -77,16 +68,13 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInitroom() {
     this.token = JSON.parse(localStorage.getItem('currentUser')).token;
     this.listemessagesroom();
-    this.keepSetInterval = setInterval(() => {
-      this.listemessagesroom();
-    }, 15000);
+    //this.room = this.chatrooms.find(x => x.id == this.roomId);
   }
 
   listemessagesroom() {
     this.chatSvc.listeMessagesRoom().subscribe(
       data => {
         if (data.errorCode) {
-          console.log('ROOM');
           this.listeMessages = data.message;
         }
       },
@@ -161,34 +149,15 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInitgroupe() {
-    console.log('TCHAT GROUPE');
+  ngOnInitgroup() {
     this.token = JSON.parse(localStorage.getItem('currentUser')).token;
-    this.chatSvc.getGroupe(this.groupe_id).subscribe(
-      data => {
-        if (data.errorCode) {
-          this.groupe = data.message.groupe;
-          this.listeMessages = data.message.messages;
-        }
-      },
-      error => {
-        console.log(error);
-      },
-      () => {
-        this.listemessagesgroupe(this.groupe_id);
-        this.keepSetInterval = setInterval(() => {
-          console.log('GROUP ' + this.groupe_id);
-          this.listemessagesgroupe(this.groupe_id);
-        }, 15000);
-      }
-    );
-
+    this.listemessagesgroup(this.groupId);
+    this.group = this.chatgroups.find(x => x.id == this.groupId);
   }
 
-  listemessagesgroupe(groupe_id) {
-    this.chatSvc.listeMessagesgroupe(groupe_id).subscribe(
+  listemessagesgroup(groupId) {
+    this.chatSvc.listeMessagesgroup(groupId).subscribe(
       data => {
-        console.log('GROUP');
         if (data.errorCode) {
           this.listeMessages = data.message;
         }
@@ -200,9 +169,9 @@ export class ChatComponent implements OnInit, OnDestroy {
     );
   }
 
-  envoiMessagegroupe() {
+  envoiMessagegroup() {
     clearInterval(this.keepSetInterval);
-    this.chatSvc.envoiMessageGroupe(this.messageAenvoye, this.groupe.id).subscribe(
+    this.chatSvc.envoiMessageGroup(this.messageAenvoye, this.group.id).subscribe(
       data => {
         console.log(data);
         if (data.errorCode) {
@@ -214,22 +183,22 @@ export class ChatComponent implements OnInit, OnDestroy {
         console.log(error);
       },
       () => {
-        this.listemessagesgroupe(this.groupe_id);
+        this.listemessagesgroup(this.groupId);
         this.keepSetInterval = setInterval(() => {
-          this.listemessagesgroupe(this.groupe_id);
+          this.listemessagesgroup(this.groupId);
         }, 15000);
       }
     );
   }
 
-  handleFileInputgroupe(event) {
+  handleFileInputgroup(event) {
     clearInterval(this.keepSetInterval);
     if (event.target.files.length !== 0) {
       this.selectedFile = event.target.files[0];
       this.chatSvc.onUploadfile(this.selectedFile).subscribe(
         data => {
           if (data.errorCode) {
-            this.chatSvc.envoiFileGroupe(data.message, this.groupe_id).subscribe(
+            this.chatSvc.envoiFileGroup(data.message, this.groupId).subscribe(
               datas => {
                 console.log(datas);
                 if (datas.errorCode) {
@@ -242,9 +211,9 @@ export class ChatComponent implements OnInit, OnDestroy {
                 console.log(errors);
               },
               () => {
-                this.listemessagesgroupe(this.groupe_id);
+                this.listemessagesgroup(this.groupId);
                 this.keepSetInterval = setInterval(() => {
-                  this.listemessagesgroupe(this.groupe_id);
+                  this.listemessagesgroup(this.groupId);
                 }, 15000);
               }
             );
@@ -258,9 +227,9 @@ export class ChatComponent implements OnInit, OnDestroy {
         () => console.log('test upload file')
       );
     } else {
-      this.listemessagesgroupe(this.groupe_id);
+      this.listemessagesgroup(this.groupId);
       this.keepSetInterval = setInterval(() => {
-        this.listemessagesgroupe(this.groupe_id);
+        this.listemessagesgroup(this.groupId);
       }, 15000);
     }
   }
@@ -394,5 +363,60 @@ export class ChatComponent implements OnInit, OnDestroy {
       },
       () => console.log('finished')
     );
+  }
+
+  optionChatChange($event: MatRadioChange){
+    this.selected="0";
+    switch (parseInt($event.value)) {
+      case 1: //room
+        if (this.chatrooms.length==0){
+          this.chatroomSvc.getAll().subscribe(room => {
+            this.chatrooms = room;
+            this.dropdowndata = this.chatrooms.map(function(item) { return {key:item['id'], value:item['roomName']}; });
+          });
+        } else {
+          this.dropdowndata = this.chatrooms.map(function(item) { return {key:item['id'], value:item['roomName']}; });
+        }
+        this.typechat = 'room';
+        break;
+      case 2: //group
+        if (this.chatgroups.length==0){
+          this.chatgroupSvc.getAll().subscribe(groups => {
+            this.chatgroups=groups;
+            this.dropdowndata = this.chatgroups.map(function(item) { return {key:item['id'], value:item['groupName']}; });
+          });
+        } else {
+          this.dropdowndata = this.chatgroups.map(function(item) { return {key:item['id'], value:item['groupName']}; });
+        }
+        this.typechat = 'group';
+        break;
+      case 3: //private
+          this.userSvc.getAll().subscribe(users => {
+            this.onlineusers = users;
+            this.dropdowndata = this.onlineusers.map(function(item) { return {key:item['id'], value:item['firstName']+ ' '+ item['lastName']}; });
+          });
+          this.typechat = 'user';
+        break;
+      default:
+          console.log(`Case default option ${$event.source.name} : ${$event.value}`);
+        break;
+    }
+  }
+
+  selChatChange=($event: any)=>{
+    switch (this.typechat) {
+      case 'room':
+        this.ngOnInitroom();
+        break;
+    case 'group':
+        this.groupId=this.selected;
+      this.ngOnInitgroup();
+      break;
+    case 'user':
+      this.ngOnInituser();
+      break;
+      default:
+        break;
+    }
   }
 }
